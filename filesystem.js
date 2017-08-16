@@ -5,29 +5,36 @@ var path = require('path');
 var cola = '/Users/minjae/git/Dorcus_Server/image/cola.jpg'
 var sprite = '/Users/minjae/git/Dorcus_Server/image/sprite.png'
 var image = '/Users/minjae/git/Dorcus_Server/image'
-function compare(cola, sprite, err) {
 
+function searchForFile (recent) {
+    fs.readdir(image, (err, files) => {
+        var recent = ''
+        files.forEach(file => {
+        fs.stat(path.join(image, file), function (err, stats) {
+        //console.log(stats)
+        if(err) {
+            throw err;
+        }
+        var time = '';
+
+        if (time == '') {
+            time = stats.birthtime;
+            recent = file
+        }
+        else if (time < stats.birthtime){
+            time = stats.birthtime;
+            recent = file
+        }
+
+        //console.log(recent)
+        console.log(time)
+
+        })
+    });
+        console.log(recent)
+    });
+    console.log(recent)
 }
 
-fs.readdir(image, (err, files) => {
-    files.forEach(file => {
-    //console.log(file);
-    console.log(fs.stat(path.join(image,file), function (err, stats) {
-        if(err) { throw err;}
-        console.log(stats)
-    }))
-});
-})
-// fs.stat(cola, function(err, stats){
-//         if(err){ throw err;}
-//     console.log(stats);
-//
-//      });
-// fs.stat(sprite, function(err, stats){
-//     if(err){ throw err;}
-//     console.log(stats);
-//
-//     console.log(stats.birthtime);
-//
-//      });
+searchForFile()
 
