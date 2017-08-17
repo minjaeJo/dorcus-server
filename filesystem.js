@@ -1,40 +1,74 @@
 var fs = require('fs');
 var path = require('path');
+var vision = require('@google-cloud/vision')({
+    projectId: 'Creative Engineering',
+    keyFilename: '/Users/minjae/Downloads/Creative Engineering-ae2856be4ceb.json'
+});
+var _ = require('underscore');
+const image = '/Users/minjae/git/Dorcus_Server/image';
 
-// 가장 최신 파일 뽑아내기
-var cola = '/Users/minjae/git/Dorcus_Server/image/cola.jpg'
-var sprite = '/Users/minjae/git/Dorcus_Server/image/sprite.png'
-var image = '/Users/minjae/git/Dorcus_Server/image'
+function getMostRecentFileName(dir) {
+    var files = fs.readdirSync(dir);
 
-function searchForFile (recent) {
-    fs.readdir(image, (err, files) => {
-        var recent = ''
-        files.forEach(file => {
-        fs.stat(path.join(image, file), function (err, stats) {
-        //console.log(stats)
-        if(err) {
-            throw err;
-        }
-        var time = '';
-
-        if (time == '') {
-            time = stats.birthtime;
-            recent = file
-        }
-        else if (time < stats.birthtime){
-            time = stats.birthtime;
-            recent = file
-        }
-
-        //console.log(recent)
-        console.log(time)
-
-        })
+    // use underscore for max()
+    return _.max(files, function (f) {
+        var fullpath = path.join(dir, f);
+        // birthtime = creation time is used
+        // replace with mtime for modification time
+        return fs.statSync(fullpath).birthtime;
     });
-        console.log(recent)
-    });
-    console.log(recent)
 }
 
-searchForFile()
+console.log(path.join(image, getMostRecentFileName(image)))
 
+
+//이미지 랜딩
+function callVision(imagePath, imageName) {
+
+    vision.detectLabels(imagePath)
+        .then((results) => {
+        const labels = results[0];
+
+    console.log('Labels:',imageName);
+    labels.forEach((label) => console.log(label));
+    console.log(results)
+
+    }).catch(err => {
+            console.error(err);
+    });
+}
+// 가장 최신 파일 탐색
+
+
+
+//path.join(dir,getMostRecentFileName(image))
+//searchForRecentlyFile();
+
+
+/*var searchForRecentlyFile = function () {
+
+    fs.readdir(image, (err, files) => {
+        files.forEach(file => {
+            fs.stat(pathModule.join(image, file), function (err, stats) {
+                if(err) {
+                    throw err;
+                }
+                var time = '';
+                var recentImage = '';
+
+                if (time == '') {
+                    time = stats.birthtime;
+                    recentImage = file
+                }
+                else if (time < stats.birthtime){
+                    time = stats.birthtime;
+                    recentImage = file
+                };
+                //console.log(recent)
+                console.log(time)
+                renderImage(pathModule.join(image, file),recentImage)
+
+            });
+        })
+    })
+};*/
