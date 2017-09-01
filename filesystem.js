@@ -7,12 +7,11 @@ var vision = require('@google-cloud/vision')({
     keyFilename: '/Users/minjae/Downloads/Creative Engineering-ae2856be4ceb.json'
     // "@google-cloud/vision": "^0.11.5"
 });
-const imagePath = '/Users/minjae/git/Dorcus_Server/image';
+const imagePath = '/Users/minjae/git/Dorcus_Server/image'; // 이미지 디렉토리 경로 
 
 function getMostRecentFileName(dir) {
     // read directory file
     var files = fs.readdirSync(dir);
-
     // use underscore for max()
     return _.max(files, function (f) {
         var fullpath = path.join(dir, f);
