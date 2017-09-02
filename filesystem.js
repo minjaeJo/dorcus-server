@@ -23,10 +23,9 @@ function getMostRecentFileName(dir) {
 
 //이미지 랜딩
 function callVision(path) {
-    //var image = path.join(imagePath, getMostRecentFileName(imagePath))
     // render label value
 
-    var txtPath = "/Users/minjae/git/Dorcus_Server/memo.txt";
+    var txtPath = "/Users/minjae/git/Dorcus_Server/memo.txt"; // txt파일 경로
     var metadata = '';
     vision.detectLabels(path)
         .then((results) => {
@@ -42,8 +41,8 @@ function callVision(path) {
         } else {
             console.log("Successful Write to " + path);
         }
-    })
-    console.log(results)
+    }) 
+    //console.log(results)
 
     
     }).catch(err => {
