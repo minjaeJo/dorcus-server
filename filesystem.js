@@ -25,14 +25,27 @@ function getMostRecentFileName(dir) {
 function callVision(path) {
     //var image = path.join(imagePath, getMostRecentFileName(imagePath))
     // render label value
+
+    var txtPath = "/Users/minjae/git/Dorcus_Server/memo.txt";
+    var metadata = '';
     vision.detectLabels(path)
         .then((results) => {
-    //     const labels = results[0];
-    //
-    // console.log('Labels:',imageName);
-    // labels.forEach((label) => console.log(label));
+        const labels = results[0];
+    
+    labels.forEach((label) => metadata += (label + ',')
+    );
+    //console.log(metadata);
+    fs.writeFile(txtPath, metadata, function(error) {
+        
+        if (error) {
+            console.error("write error:  " + error.message);
+        } else {
+            console.log("Successful Write to " + path);
+        }
+    })
     console.log(results)
 
+    
     }).catch(err => {
             console.error(err);
     });
